@@ -13,8 +13,6 @@
     "batch_tool": true,
     "openTelemetry": false
   },
-  "model": "github-copilot/claude-sonnet-4.6",
-  "small_model": "github-copilot/gpt-5-mini",
   "default_agent": "plan",
   "permission": {
     "bash": {
@@ -26,7 +24,6 @@
       "find *": "allow",
       "ls *": "allow",
       "cat *": "allow",
-      "git *": "deny",
       "git log *": "allow",
       "git status *": "allow"
     }
