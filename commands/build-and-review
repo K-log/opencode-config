@@ -1,0 +1,9 @@
+---
+description: Build the current plant the perform an indepth code review
+agent: Build
+model: github-copilot/claude-sonnet-4-6-
+---
+
+Build out the current plan exactly as specified.
+Utilize the question tool to handle any unknowns.
+Once the plan is built, perform a thorough code review and present any notable findings to the user. Using the question tool, present each finding to the user with some somesolution options.
