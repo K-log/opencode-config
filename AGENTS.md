@@ -32,7 +32,7 @@ Respond verbosely for: security warnings, irreversible action confirmations, mul
 ### Examples
 
 Prompt: "Why React component re-render?"
-Response: "`useEffect` <dep> -> non-stable ref -> re-render. Wrap <dep> in `useMemo`."
+Response: "`useEffect` `<dep>` → non-stable ref → re-render. Wrap `<dep>` in `useMemo`."
 
 Prompt: "Explain ISO-8601 date format"
 Response: "`YYYY-MM-DD` or `2026-04-13T15:18:45Z`. Docs: https://en.wikipedia.org/wiki/ISO_8601"
@@ -53,8 +53,7 @@ Response: 100°C.
 
 ## Tool Usage
 
-Prefer dedicated tools over bash commands. Use bash only for system operations
-with no tool equivalent (git, npm, docker, package managers, etc.).
+Prefer dedicated tools over bash commands. Use bash only for system operations with no tool equivalent (git, npm, docker, package managers, etc.).
 
 | Operation      | Use tool | Not command         |
 | -------------- | -------- | ------------------- |

@@ -33,11 +33,15 @@ Execute these phases in order. Complete each phase before starting the next.
 
 Parse the user's message to extract:
 
-- **Ticket ID**: A ticket identifier (e.g. `ZVC-1234`). Used to name the plan file.
+- **Ticket ID** _(optional)_: A ticket identifier (e.g. `ZVC-1234`). Used to
+  name the plan file. If no ticket ID is present, derive a short kebab-case
+  slug from the feature description (e.g. `add-dark-mode`) and use that as
+  the plan file name.
 - **Feature description**: What needs to be built
 
-If the ticket ID or feature description are missing or ambiguous, ask
-the user before proceeding. Do not guess at requirements.
+If the feature description is missing or ambiguous, ask the user before
+proceeding. Do not guess at requirements. A ticket ID is never required —
+proceed without one if the user does not provide it.
 
 #### Phase 2: Research
 
@@ -66,8 +70,8 @@ Wait for the analysis report before proceeding.
 Run the following two tasks in parallel:
 
 1. **Synthesize the implementation plan** — combine the research report and
-   analysis report into a structured implementation plan. *Question* the user if they would like to write the plan to
-   `.opencode/plans/<ticket-id>.md`. Always present the final plan in the conversation.
+   analysis report into a structured implementation plan. _Question_ the user if they would like to write the plan to
+   `.opencode/plans/<ticket-id-or-slug>.md`. Always present the final plan in the conversation.
 
 2. **Delegate to the `plan-feature-tests` subagent** — provide it with:
    - The feature description
@@ -81,7 +85,7 @@ immediately after Phase 3 completes.
 Use this exact format for the plan file:
 
 ```
-# Plan: <ticket-id> -- <description>
+# Plan: <ticket-id-or-slug> -- <description>
 
 ## Context
 
@@ -148,7 +152,7 @@ the user can quickly decide whether the direction is correct. Format:
 
 **Summary**
 
-> **<ticket-id>**: <one-line description of the feature>
+> **<ticket-id-or-slug>**: <one-line description of the feature>
 >
 > **Key changes** (<N> steps):
 >
@@ -176,7 +180,7 @@ After the summary, present the full plan. Then ask the user:
 > anything, or switch to the build agent (Tab) to start implementation.
 
 Allow the user to give feedback and revise the plan. Update both the
-conversation output and the `.opencode/plans/<ticket-id>.md`
+conversation output and the `.opencode/plans/<ticket-id-or-slug>.md`
 file when changes are made.
 
 ### Rules
