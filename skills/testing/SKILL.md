@@ -13,3 +13,15 @@ Do not test: simple presentational logic, third-party behavior, auto-generated c
 - Mock external dependencies, not internal modules.
 - Write descriptive test names that document intent.
 - Assume users are hostile and should not be trusted when writing test criteria.
+
+## Playwright Browser Tools
+
+`browser_run_code` and `browser_evaluate` execute JavaScript in a **browser page sandbox**. They are NOT a Node.js runtime.
+
+- Never use `require()`, `import()`, `process`, `fs`, `child_process`, `execSync`, or any Node.js API inside these tools.
+- Only browser globals are available: `document`, `window`, `navigator`, `fetch`, `localStorage`, etc.
+- Use these tools only to read or manipulate the DOM or call browser APIs.
+- For shell commands, git, or file system access: use bash.
+- Do not use any Playwright browser tool for tasks that do not require a rendered browser page.
+- Use `browser_snapshot` (accessibility tree) to read page state before interactions — not `browser_take_screenshot`.
+- To run the Playwright test suite, use bash (`npx playwright test`), not the MCP browser tools.

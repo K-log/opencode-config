@@ -175,13 +175,9 @@ Once all three tasks complete:
 - Merge the parallelized steps from task 3 into each milestone's
   `#### Implementation Steps` section
 - Merge the test plan from task 2 into `## Test Plan`
-- Ask the user if they would like to write the plan to
-  `.opencode/plans/<ticket-id-or-slug>.md` and present the full plan in the
-  conversation.
-- Write the plan file if the user confirms.
+- Write the plan to `.opencode/plans/<ticket-id-or-slug>.md` automatically.
 
-Present the plan summary to the user using this format before showing the
-full plan:
+Present the plan summary to the user using this format:
 
 ---
 
@@ -207,12 +203,7 @@ full plan:
 
 ---
 
-Ask the user:
-
-> Does this plan look correct? Reply to adjust, or say "build it" to proceed.
-
-Allow the user to revise the plan. Update the plan file if changes are made.
-Do not proceed to Phase 5 until the user approves.
+Proceed immediately to Phase 5 after presenting the summary.
 
 ---
 
@@ -250,8 +241,7 @@ Evaluate the review reports:
 
 - **If `code-reviewer` reports Critical Issues**: delegate fixes to
   `build-parallelizer`, then return to step 5b. Increment the loop counter.
-- **If only Improvements or Nitpicks**: present them to the user via the
-  `question` tool and ask whether to fix them or proceed to commit.
+- **If only Improvements or Nitpicks**: skip them and proceed to commit.
 - **If both reports are clean**: proceed directly to step 5d.
 
 **Loop cap: 3 iterations per milestone.** If Critical Issues persist after 3
@@ -263,20 +253,18 @@ loop iteration 2 of 3").
 
 ##### 5d: Commit
 
-Once the review is clean (or the user has approved proceeding despite minor
-issues), invoke the `/git-commit ai` command to commit the milestone's changes.
-
-The `/git-commit` command will:
-
-- Infer the commit message style from git log
-- Prefix with ticket ID if present
-- Present the proposed message to the user for approval
-- Execute the commit on approval
-
-Do not commit without user confirmation.
+Once the review is clean, commit the milestone's changes by inferring the
+commit message style from git log, prefixing with the ticket ID if present,
+and running the commit via bash. Do not ask the user for confirmation.
 
 After committing, proceed to the next milestone. Repeat steps 5a-5d until all
 milestones are complete.
+
+Once all milestones are committed, present a final summary to the user:
+
+- List of commits made (hash + message)
+- Any Improvements or Nitpicks from the review reports that were skipped
+- Test plan from the plan file for manual verification
 
 ---
 
@@ -284,7 +272,8 @@ milestones are complete.
 
 - Never write application code. Your output is plans and orchestration.
 - Never skip the research or analysis phases.
-- Never deviate from the plan without user confirmation via `question`.
+- Only use the `question` tool for unresolved build blockers or persistent
+  Critical Issues after 3 fix cycles. Do not ask for confirmation otherwise.
 - Implementation steps must be specific enough that subagents do not need to
   re-research the codebase. Include file paths, function names, and pattern
   references.

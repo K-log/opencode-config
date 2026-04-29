@@ -15,21 +15,27 @@
     "openTelemetry": false
   },
   "default_agent": "plan",
-  "permission": {
-    "bash": {
-      "*": "ask",
-      "npx tsx --noEmit *": "allow",
-      "head *": "allow",
-      "grep *": "allow",
-      "tail *": "allow",
-      "find *": "allow",
-      "ls *": "allow",
-      "cat *": "allow",
-      "git log *": "allow",
-      "git status *": "allow"
-    }
-  },
+  "permission": {},
   "agent": {
+    "build": {
+      "model": "github-copilot/gpt-5.3-codex",
+      "rm *": "deny",
+      "rm -rf *": "deny",
+      "rm -f *": "deny",
+      "rmdir *": "deny",
+      "mkfs *": "deny",
+      "dd *": "deny",
+      "chmod -R *": "deny",
+      "chown -R *": "deny",
+      "git clean *": "deny",
+      "git checkout -- *": "deny",
+      "git reset --hard*": "deny",
+      "git push --force*": "deny",
+      "git push -f *": "deny",
+      "truncate *": "deny",
+      "shred *": "deny",
+      "*": "allow"
+    },
     "plan": {
       "permission": {
         "bash": {
@@ -41,18 +47,31 @@
           "ls *": "allow",
           "cat *": "allow"
         }
-      },
-      "options": {}
+      }
+    },
+    "ask": {
+      "model": "github-copilot/claude-sonnet-4.6"
+    },
+    "build-parallelizer": {
+      "model": "github-copilot/gpt-5-mini"
+    },
+    "code-reviewer": {
+      "model": "github-copilot/claude-sonnet-4.6"
     },
     "plan-feature-analysis": {
-      "model": "small_model",
-      "options": {},
-      "permission": {}
+      "model": "github-copilot/claude-sonnet-4.6"
     },
     "plan-feature-research": {
-      "model": "small_model",
-      "options": {},
-      "permission": {}
+      "model": "github-copilot/claude-sonnet-4.6"
+    },
+    "plan-feature-tests": {
+      "model": "github-copilot/gpt-5-mini"
+    },
+    "regression-checker": {
+      "model": "github-copilot/claude-sonnet-4.6"
+    },
+    "task-parallelizer": {
+      "model": "github-copilot/gpt-5-mini"
     }
   },
   "formatter": {
@@ -82,15 +101,6 @@
     "jira": {
       "type": "remote",
       "url": "https://mcp.atlassian.com/v1/mcp",
-      "enabled": true
-    },
-    "microsoft/playwright-mcp": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@playwright/mcp@latest"
-      ],
       "enabled": true
     }
   }

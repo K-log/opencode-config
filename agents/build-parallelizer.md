@@ -7,26 +7,25 @@ description: >-
 mode: subagent
 temperature: 0.1
 permission:
-  read: true
-  edit: true
+  read: allow
+  edit: allow
   bash:
-    command:
-      "rm *": deny
-      "rm -rf *": deny
-      "rm -f *": deny
-      "rmdir *": deny
-      "mkfs *": deny
-      "dd *": deny
-      "chmod -R *": deny
-      "chown -R *": deny
-      "git clean *": deny
-      "git checkout -- *": deny
-      "git reset --hard*": deny
-      "git push --force*": deny
-      "git push -f *": deny
-      "truncate *": deny
-      "shred *": deny
-      "*": allow
+    "rm *": deny
+    "rm -rf *": deny
+    "rm -f *": deny
+    "rmdir *": deny
+    "mkfs *": deny
+    "dd *": deny
+    "chmod -R *": deny
+    "chown -R *": deny
+    "git clean *": deny
+    "git checkout -- *": deny
+    "git reset --hard*": deny
+    "git push --force*": deny
+    "git push -f *": deny
+    "truncate *": deny
+    "shred *": deny
+    "*": allow
 ---
 
 You are the Build Parallelizer. Your job is to execute an implementation plan
