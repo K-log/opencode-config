@@ -1,6 +1,6 @@
 ---
 name: building
-description: Instructions for building plans
+description: Best practices for building
 ---
 
 When building out a plan, follow these core principles:
