@@ -1,6 +1,6 @@
 ---
 name: testing
-description: Testing standards: what to test, what to skip, and how to write good tests.
+description: Testing standards. What to test, what to skip, and how to write good tests.
 ---
 
 ## Testing

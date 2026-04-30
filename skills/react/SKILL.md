@@ -1,6 +1,6 @@
 ---
 name: react
-description: React coding standards: prefer functional components and hooks, strongly type all props and state.
+description: React coding standards. Prefer functional components and hooks, strongly type all props and state.
 ---
 
 ## React

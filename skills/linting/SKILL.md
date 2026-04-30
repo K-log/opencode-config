@@ -1,6 +1,6 @@
 ---
 name: linting
-description: Linting and type checking standards: run the project's tooling before declaring a task done.
+description: Linting and type checking standards. Run the project's tooling before declaring a task done.
 ---
 
 ## Linting and Type Checking

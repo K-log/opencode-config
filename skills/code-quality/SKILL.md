@@ -1,6 +1,6 @@
 ---
 name: code-quality
-description: Code quality and refactoring standards: comments, types, debug hygiene, and when to refactor.
+description: Code quality and refactoring standards. Comments, types, debug hygiene, and when to refactor.
 ---
 
 ## Code Quality

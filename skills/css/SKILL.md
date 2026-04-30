@@ -1,6 +1,6 @@
 ---
 name: css
-description: CSS standards: prefer CSS modules over inline styles.
+description: CSS standards. Prefer CSS modules over inline styles.
 ---
 
 ## CSS
