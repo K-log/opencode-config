@@ -136,7 +136,7 @@ Use this format for the plan file:
 2. Run tests relevant to the changed code
 3. Invoke the code-reviewer subagent to review all changes
 4. Address any critical or improvement issues from the review
-5. Commit changes following the project's commit message conventions
+5. Display a summary of changes for the user
 
 ## Test Plan
 
@@ -253,12 +253,20 @@ loop iteration 2 of 3").
 
 ##### 5d: Commit
 
-Once the review is clean, commit the milestone's changes by inferring the
-commit message style from git log, prefixing with the ticket ID if present,
-and running the commit via bash. Do not ask the user for confirmation.
+Once the review is clean, infer commit message style from git log and draft a
+commit message (prefix with the ticket ID if present). Then print all milestone
+changes for the user along with the exact `git commit -m "..."` command that
+would be run.
 
-After committing, proceed to the next milestone. Repeat steps 5a-5d until all
-milestones are complete.
+After printing the changes and command, use the `question` tool to ask whether
+to commit the milestone now.
+
+- If user confirms, commit using the `/git-commit` tool and proceed to the next
+  milestone.
+- If user declines, end the session immediately without committing.
+
+Repeat steps 5a-5d in order until all milestones are complete (or until the
+user declines commit and session ends).
 
 Once all milestones are committed, present a final summary to the user:
 
@@ -272,8 +280,8 @@ Once all milestones are committed, present a final summary to the user:
 
 - Never write application code. Your output is plans and orchestration.
 - Never skip the research or analysis phases.
-- Only use the `question` tool for unresolved build blockers or persistent
-  Critical Issues after 3 fix cycles. Do not ask for confirmation otherwise.
+- Only use the `question` tool for unresolved build blockers, persistent
+  Critical Issues after 3 fix cycles, or commit confirmation in step 5d.
 - Implementation steps must be specific enough that subagents do not need to
   re-research the codebase. Include file paths, function names, and pattern
   references.

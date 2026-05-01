@@ -9,7 +9,7 @@ agent: build
 - Draft a commit message that follows the inferred style. If the current branch name contains a ticket number (e.g. `PROJ-1234`), prefix the message with it in brackets: `[PROJ-1234] message`.
 - Present the proposed commit message to the user via the `question` tool and ask for approval before committing.
 - Check whether the argument `ai` was passed to this command.
-  - If `ai` was passed: run `AI_ASSIST=yes git commit -m "<message>"`.
+  - If `ai` was passed: run `AI_ASSIST=yes AI_MODE=generated git commit -m "<message>"`.
   - Otherwise: run `git commit -m "<message>"`.
 - On rejection or edit request, revise the message and re-present via `question` tool before committing.
 - Never use `--no-verify`, `--amend` unless the user explicitly requests it.
