@@ -22,7 +22,7 @@ export async function loadConfig(): Promise<NbdConfig> {
 }
 
 export function getConfig(): NbdConfig {
-  return _config ?? DEFAULTS
+  return { ...(_config ?? DEFAULTS) }
 }
 
 export function isModuleEnabled(name: string): boolean {

@@ -1,10 +1,14 @@
 import type { Hooks } from "@opencode-ai/plugin"
+import type { createOpencodeClient } from "@opencode-ai/sdk"
 import { isModuleEnabled } from "../config"
 import { appendJsonl } from "../lib/storage"
 import { UNDO_FILE } from "../lib/paths"
+import { log } from "../lib/log"
 import type { UndoEntry } from "../types"
 
-export function undoStackHooks(): Partial<Hooks> {
+type Client = ReturnType<typeof createOpencodeClient>
+
+export function undoStackHooks(client: Client): Partial<Hooks> {
   return {
     async event({ event }) {
       if (event.type !== "file.edited") return
@@ -17,8 +21,9 @@ export function undoStackHooks(): Partial<Hooks> {
           filePath,
         }
         await appendJsonl(UNDO_FILE, entry)
+        await log(client, "undo-stack", "debug", "undo entry recorded", { file: filePath })
       } catch {
-        // file unreadable or write failed
+        await log(client, "undo-stack", "warn", "failed to record undo entry", { file: filePath })
       }
     },
   }

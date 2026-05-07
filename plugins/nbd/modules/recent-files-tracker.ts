@@ -1,10 +1,14 @@
 import type { Hooks } from "@opencode-ai/plugin"
+import type { createOpencodeClient } from "@opencode-ai/sdk"
 import { isModuleEnabled } from "../config"
 import { readJson, writeJson } from "../lib/storage"
 import { RECENT_FILES_FILE } from "../lib/paths"
+import { log } from "../lib/log"
 import type { RecentFile } from "../types"
 
-export function recentFilesTrackerHooks(): Partial<Hooks> {
+type Client = ReturnType<typeof createOpencodeClient>
+
+export function recentFilesTrackerHooks(client: Client): Partial<Hooks> {
   return {
     async event({ event }) {
       if (event.type !== "file.edited") return
@@ -21,6 +25,7 @@ export function recentFilesTrackerHooks(): Partial<Hooks> {
         .sort((a, b) => b.lastTouched.localeCompare(a.lastTouched))
         .slice(0, 50)
       await writeJson(RECENT_FILES_FILE, updated)
+      await log(client, "recent-files-tracker", "debug", "recent file updated", { file: filePath })
     },
   }
 }

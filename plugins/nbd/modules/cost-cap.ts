@@ -41,7 +41,7 @@ export function costCapHooks(client: Client): Partial<Hooks> {
         .filter((r) => r.timestamp.startsWith(today))
         .reduce((sum, r) => sum + r.costUsd, 0)
 
-      const totalWithCurrent = todayCost + assistant.cost
+      const totalWithCurrent = todayCost
       const cfg = getConfig()
 
       if (cfg.costCapUsd !== null && totalWithCurrent > cfg.costCapUsd) {

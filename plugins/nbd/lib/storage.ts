@@ -17,10 +17,16 @@ export async function readJsonl<T>(filePath: string): Promise<T[]> {
   const file = Bun.file(filePath)
   if (!(await file.exists())) return []
   const text = await file.text()
-  return text
-    .split("\n")
-    .filter(Boolean)
-    .map((line) => JSON.parse(line) as T)
+  const results: T[] = []
+  for (const line of text.split("\n")) {
+    if (!line.trim()) continue
+    try {
+      results.push(JSON.parse(line) as T)
+    } catch {
+      // skip malformed line
+    }
+  }
+  return results
 }
 
 export async function writeJsonl<T>(filePath: string, records: T[]): Promise<void> {

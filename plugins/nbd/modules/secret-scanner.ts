@@ -4,7 +4,7 @@ import { isModuleEnabled } from "../config"
 import { notify } from "../lib/notifier"
 import { log } from "../lib/log"
 
-const SECRET_PATTERNS = [
+export const SECRET_PATTERNS = [
   /AKIA[0-9A-Z]{16}/, // AWS access key
   /ghp_[a-zA-Z0-9]{36}/, // GitHub PAT
   /sk-[a-zA-Z0-9]{48}/, // OpenAI secret key
@@ -27,6 +27,7 @@ export function secretScannerHooks(client: Client): Partial<Hooks> {
       if (!isModuleEnabled("secret-scanner")) return
 
       const filePath = event.properties.file
+      if (!filePath) return
 
       let content: string
       try {

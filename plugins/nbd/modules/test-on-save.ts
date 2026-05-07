@@ -22,7 +22,7 @@ export function testOnSaveHooks(client: Client): Partial<Hooks> {
         if (stdout) await log(client, "test-on-save", "info", stdout)
         if (stderr) await log(client, "test-on-save", "warn", stderr)
       } catch (err) {
-        const e = err as { stdout?: { toString(): string }; stderr?: { toString(): string } }
+        const e = err as { stdout?: Buffer; stderr?: Buffer }
         const stdout = e?.stdout?.toString() ?? ""
         const stderr = e?.stderr?.toString() ?? ""
         if (stdout) await log(client, "test-on-save", "info", stdout)

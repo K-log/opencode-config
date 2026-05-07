@@ -1,7 +1,11 @@
 import type { Hooks } from "@opencode-ai/plugin"
+import type { createOpencodeClient } from "@opencode-ai/sdk"
 import { isModuleEnabled } from "../config"
 import { appendJsonl } from "../lib/storage"
 import { SESSION_EVENTS_FILE } from "../lib/paths"
+import { log } from "../lib/log"
+
+type Client = ReturnType<typeof createOpencodeClient>
 
 interface SessionEvent {
   timestamp: string
@@ -9,7 +13,7 @@ interface SessionEvent {
   note: string
 }
 
-export function memorySyncHooks(): Partial<Hooks> {
+export function memorySyncHooks(client: Client): Partial<Hooks> {
   return {
     async event({ event }) {
       if (event.type !== "session.idle") return
@@ -22,6 +26,7 @@ export function memorySyncHooks(): Partial<Hooks> {
         note: "session ended",
       }
       await appendJsonl(SESSION_EVENTS_FILE, entry)
+      await log(client, "memory-sync", "debug", "session event written", { sessionId: sessionID })
     },
   }
 }
