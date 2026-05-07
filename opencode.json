@@ -4,7 +4,8 @@
     "rules.md"
   ],
   "plugin": [
-    "@franlol/opencode-md-table-formatter@latest"
+    "@franlol/opencode-md-table-formatter@latest",
+    "./plugins/nbd/index.ts"
   ],
   "snapshot": false,
   "compaction": {
@@ -15,26 +16,50 @@
     "openTelemetry": false
   },
   "default_agent": "plan",
-  "permission": {},
+  "permission": {
+    "bash": {
+      "git status": "allow",
+      "git log *": "allow",
+      "git diff *": "allow",
+      "git show *": "allow",
+      "git branch": "allow",
+      "ls *": "allow",
+      "echo *": "allow",
+      "pwd": "allow",
+      "which *": "allow",
+      "type *": "allow",
+      "wc *": "allow",
+      "sort *": "allow",
+      "uniq *": "allow",
+      "sed -n *": "allow",
+      "jq *": "allow",
+      "node --version": "allow",
+      "npm --version": "allow",
+      "bun --version": "allow"
+    }
+  },
   "agent": {
     "build": {
-      "model": "github-copilot/gpt-5.3-codex",
-      "rm *": "deny",
-      "rm -rf *": "deny",
-      "rm -f *": "deny",
-      "rmdir *": "deny",
-      "mkfs *": "deny",
-      "dd *": "deny",
-      "chmod -R *": "deny",
-      "chown -R *": "deny",
-      "git clean *": "deny",
-      "git checkout -- *": "deny",
-      "git reset --hard*": "deny",
-      "git push --force*": "deny",
-      "git push -f *": "deny",
-      "truncate *": "deny",
-      "shred *": "deny",
-      "*": "allow"
+      "permission": {
+        "bash": {
+          "rm *": "deny",
+          "rm -rf *": "deny",
+          "rm -f *": "deny",
+          "rmdir *": "deny",
+          "mkfs *": "deny",
+          "dd *": "deny",
+          "chmod -R *": "deny",
+          "chown -R *": "deny",
+          "git clean *": "deny",
+          "git checkout -- *": "deny",
+          "git reset --hard*": "deny",
+          "git push --force*": "deny",
+          "git push -f *": "deny",
+          "truncate *": "deny",
+          "shred *": "deny",
+          "*": "allow"
+        }
+      }
     },
     "plan": {
       "permission": {
@@ -49,26 +74,11 @@
         }
       }
     },
-    "ask": {
-      "model": "github-copilot/claude-sonnet-4.6"
-    },
     "build-parallelizer": {
       "model": "github-copilot/gpt-5-mini"
     },
-    "code-reviewer": {
-      "model": "github-copilot/claude-sonnet-4.6"
-    },
-    "plan-feature-analysis": {
-      "model": "github-copilot/claude-sonnet-4.6"
-    },
-    "plan-feature-research": {
-      "model": "github-copilot/claude-sonnet-4.6"
-    },
     "plan-feature-tests": {
       "model": "github-copilot/gpt-5-mini"
-    },
-    "regression-checker": {
-      "model": "github-copilot/claude-sonnet-4.6"
     },
     "task-parallelizer": {
       "model": "github-copilot/gpt-5-mini"
@@ -102,6 +112,15 @@
       "type": "remote",
       "url": "https://mcp.atlassian.com/v1/mcp",
       "enabled": true
+    },
+    "slack": {
+      "type": "remote",
+      "url": "https://mcp.slack.com/mcp",
+      "enabled": true,
+      "oauth": {
+        "clientId": "{file:./.secrets/slack_client_id}",
+        "clientSecret": "{file:./.secrets/slack_client_secret}"
+      }
     }
   }
 }

@@ -97,9 +97,9 @@ Structure your output as:
 
 ## Rules
 
-- If a plan is provided, preserve its scope exactly. Flag if you notice ambiguity but do not resolve it unilaterally — ask the user.
+- If a plan is provided, preserve its scope exactly. Flag ambiguity, do not resolve it unilaterally. Return ambiguities in your report for the orchestrator to relay to the user.
 - When editing an existing plan, show what changed (before/after) so the user can confirm requirements are intact.
 - Label each task clearly so it can be assigned independently.
 - Keep tasks as self-contained as possible to minimize cross-task coordination overhead.
 - If you cannot determine whether a dependency exists, assume it does and note the assumption for the user to clarify.
-- Use the _question_ tool for any clarification.
+- Never ask the user directly. Return clarification needs in your report for the orchestrator to relay.

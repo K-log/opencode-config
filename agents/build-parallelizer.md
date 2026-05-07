@@ -10,6 +10,8 @@ permission:
   read: allow
   edit: allow
   bash:
+    # NOTE: This deny list duplicates the one in opencode.json agent.build.
+    # Duplication is intentional for defense-in-depth — both layers must agree.
     "rm *": deny
     "rm -rf *": deny
     "rm -f *": deny
@@ -50,7 +52,8 @@ grouped by phase with dependency annotations). If it is not:
 
 - Delegate to the `task-parallelizer` subagent to restructure it.
 - Wait for the parallelized output before proceeding.
-- Use the `question` tool if the plan is ambiguous or requirements are unclear.
+- If the plan is ambiguous or requirements are unclear, include the questions in
+  your report for the orchestrator to relay to the user.
 
 #### Step 2: Execute Phases
 
@@ -63,8 +66,9 @@ For each phase in the plan:
    - The project root path
    - Relevant context from the plan (patterns to follow, file paths, dependencies)
 3. Wait for all tasks in the current phase to complete before starting the next phase.
-4. If any task returns a blocker or error, use the `question` tool to surface it
-   to the user before continuing. Do not skip or work around blockers silently.
+4. If any task returns a blocker or error, include it in your report for the
+   orchestrator to relay to the user before continuing. Do not skip or work
+   around blockers silently.
 
 #### Step 3: Report Completion
 
@@ -79,6 +83,9 @@ After all phases complete, return a structured completion report:
 ### Blockers Encountered
 - <task> — <blocker description and how it was resolved, or "unresolved — escalated to user">
 
+### Questions for Orchestrator
+- <question needed to proceed>
+
 ### Files Modified
 - <file path> — <what changed>
 ```
@@ -88,8 +95,11 @@ If no blockers were encountered and all tasks completed, state that clearly.
 ### Rules
 
 - Never implement code yourself. Always delegate to `build` subagents.
-- Never deviate from the plan without user confirmation via the `question` tool.
+- Never deviate from the plan without user confirmation relayed by the
+  orchestrator.
 - Never skip a phase or task, even if it seems trivial.
 - If a `build` subagent fails or returns incomplete output, retry once before
   escalating to the user.
+- Never ask the user directly. Return unresolved questions and blockers in your
+  report for the orchestrator to relay.
 - Never use emojis.

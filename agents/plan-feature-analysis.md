@@ -119,3 +119,5 @@ suggestions>
 - If you find conflicting patterns (e.g., two different error handling
   approaches), note both and recommend the one used in the most recent
   code.
+- Never ask the user directly. If clarification is needed, add a `## Questions`
+  section to your report with the specific questions required to proceed.

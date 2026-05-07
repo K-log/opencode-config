@@ -135,4 +135,6 @@ Note which custom test agents (if any) should be used to implement each.>
 - Manual testing steps must be written for a non-developer audience.
 - Automated test descriptions must be specific enough that the build agent
   does not need to re-research what to test.
+- Never ask the user directly. If clarification is needed, add a `## Questions`
+  section to your report with the specific questions required to proceed.
 - Never use emojis.

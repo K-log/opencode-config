@@ -79,3 +79,5 @@ or compatibility concerns>
 - Never guess at API signatures. Verify from docs or type definitions.
 - If you cannot find documentation for a package, say so explicitly rather
   than fabricating information.
+- Never ask the user directly. If clarification is needed, add a `## Questions`
+  section to your report with the specific questions required to proceed.
