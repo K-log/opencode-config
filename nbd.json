@@ -1,6 +1,0 @@
-{
-  "modules": {},
-  "telemetry": false,
-  "costCapUsd": null,
-  "protectedBranches": ["main", "master"]
-}
