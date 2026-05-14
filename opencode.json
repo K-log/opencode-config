@@ -4,8 +4,7 @@
     "rules.md"
   ],
   "plugin": [
-    "@franlol/opencode-md-table-formatter@latest",
-    "./plugins/nbd/index.ts"
+    "@franlol/opencode-md-table-formatter@latest"
   ],
   "snapshot": false,
   "compaction": {
@@ -59,7 +58,8 @@
           "shred *": "deny",
           "*": "allow"
         }
-      }
+      },
+      "options": {}
     },
     "plan": {
       "permission": {
@@ -72,7 +72,8 @@
           "ls *": "allow",
           "cat *": "allow"
         }
-      }
+      },
+      "options": {}
     },
     "build-parallelizer": {
       "model": "github-copilot/gpt-5-mini"
@@ -112,15 +113,6 @@
       "type": "remote",
       "url": "https://mcp.atlassian.com/v1/mcp",
       "enabled": true
-    },
-    "slack": {
-      "type": "remote",
-      "url": "https://mcp.slack.com/mcp",
-      "enabled": true,
-      "oauth": {
-        "clientId": "{file:./.secrets/slack_client_id}",
-        "clientSecret": "{file:./.secrets/slack_client_secret}"
-      }
     }
   }
 }
