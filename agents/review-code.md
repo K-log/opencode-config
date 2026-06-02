@@ -24,7 +24,7 @@ description: >-
   </commentary>
 
   assistant: {
-    "name": "code-reviewer.agent",
+    "name": "review-code.agent",
     "arguments": {
       "context": "Review the UserProfileCard component for React best practices and linting errors."
     }
@@ -52,7 +52,7 @@ description: >-
   </commentary>
 
   assistant: {
-    "name": "code-reviewer.agent",
+    "name": "review-code.agent",
     "arguments": {
       "context": "Run linting and type checking on main.py and report findings."
     }

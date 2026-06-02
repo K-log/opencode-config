@@ -22,7 +22,7 @@ description: >-
   </commentary>
 
   assistant: {
-    "name": "regression-checker",
+    "name": "check-regressions",
     "arguments": {
       "prompt": "Check for regressions in the auth middleware changes. Focus on token validation logic."
     }
@@ -47,7 +47,7 @@ description: >-
   </commentary>
 
   assistant: {
-    "name": "regression-checker",
+    "name": "check-regressions",
     "arguments": {
       "prompt": "Check for regressions after refactoring the utility function. Identify any callers whose behavior may have changed."
     }

@@ -5,7 +5,7 @@ description: Best practices for creating plans.
 
 When working on any task that involves multiple steps or a plan:
 
-1. Use the `task-parallelizer` agent (via the Task tool) to create or restructure the plan.
+1. Use the `parallelize-task` agent (via the Task tool) to create or restructure the plan.
 2. Save the plan output to `.opencode/plans/<descriptive-name>.md` at the start of the task.
 3. The plan file must include a progress section listing each task with a status marker:
    - `[ ]` pending

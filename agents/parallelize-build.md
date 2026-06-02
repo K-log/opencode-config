@@ -3,7 +3,7 @@ description: >-
   Executes a parallelized implementation plan by delegating each phase to
   build subagents running concurrently. Use this agent when a plan has already
   been structured into parallel phases and needs to be executed. If the plan
-  is not yet parallelized, this agent will invoke task-parallelizer first.
+  is not yet parallelized, this agent will invoke parallelize-task first.
 mode: subagent
 temperature: 0.1
 permission:
@@ -31,7 +31,7 @@ You receive:
 Check whether the plan is already structured into parallel phases (i.e. tasks
 grouped by phase with dependency annotations). If it is not:
 
-- Delegate to the `task-parallelizer` subagent to restructure it.
+- Delegate to the `parallelize-task` subagent to restructure it.
 - Wait for the parallelized output before proceeding.
 - If the plan is ambiguous or requirements are unclear, include the questions in
   your report for the orchestrator to relay to the user.

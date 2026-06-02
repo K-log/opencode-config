@@ -75,13 +75,13 @@
       },
       "options": {}
     },
-    "build-parallelizer": {
+    "parallelize-build": {
       "model": "github-copilot/gpt-5-mini"
     },
     "plan-feature-tests": {
       "model": "github-copilot/gpt-5-mini"
     },
-    "task-parallelizer": {
+    "parallelize-task": {
       "model": "github-copilot/gpt-5-mini"
     }
   },

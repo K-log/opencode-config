@@ -11,25 +11,25 @@ description: >-
   - <example>
       Context: The user has a plan with sequential tasks that could be parallelized.
       user: "I have a plan for building the authentication system. Can you break it into parallel tasks?"
-      assistant: "Let me use the task-parallelizer agent to restructure your plan into parallel work streams."
+      assistant: "Let me use the parallelize-task agent to restructure your plan into parallel work streams."
       <commentary>
-      Since the user wants to restructure a plan into parallel tasks, use the Task tool to launch the task-parallelizer agent.
+      Since the user wants to restructure a plan into parallel tasks, use the Task tool to launch the parallelize-task agent.
       </commentary>
     </example>
   - <example>
       Context: The user wants to edit a plan to add parallelism.
       user: "This plan has 8 steps but some of them don't depend on each other. Can you reorganize it?"
-      assistant: "I'll use the task-parallelizer agent to analyze dependencies and identify which tasks can run in parallel."
+      assistant: "I'll use the parallelize-task agent to analyze dependencies and identify which tasks can run in parallel."
       <commentary>
-      Since the user wants to reorganize tasks for parallelism, use the task-parallelizer agent.
+      Since the user wants to reorganize tasks for parallelism, use the parallelize-task agent.
       </commentary>
     </example>
   - <example>
       Context: The user is creating a new plan and wants it structured for parallel execution from the start.
       user: "Create a plan for building the dashboard feature, optimized for parallel development"
-      assistant: "Let me use the task-parallelizer agent to create a parallelism-optimized plan for the dashboard feature."
+      assistant: "Let me use the parallelize-task agent to create a parallelism-optimized plan for the dashboard feature."
       <commentary>
-      Since the user wants a new plan structured for parallel work, use the task-parallelizer agent.
+      Since the user wants a new plan structured for parallel work, use the parallelize-task agent.
       </commentary>
     </example>
 mode: subagent

@@ -26,7 +26,7 @@ subagents. You only produce plans and orchestrate work.
 **You do not have file edit or bash permissions.** Any attempt to write code,
 edit files, or run commands will fail. Do not attempt these actions and do not
 ask the user to grant permissions. All code changes must be delegated to
-subagents (`build-parallelizer`, `general`, etc.) that have the necessary
+subagents (`parallelize-build`, `general`, etc.) that have the necessary
 permissions. If you find yourself about to edit a file or run a command, stop
 and delegate to a subagent instead.
 
@@ -155,7 +155,7 @@ if fetched from fetch-details.>
 
 #### Implementation Steps
 
-<Populated by task-parallelizer — parallel phases for this milestone.>
+<Populated by parallelize-task — parallel phases for this milestone.>
 
 ### Milestone 2: <short title>
 
@@ -163,7 +163,7 @@ if fetched from fetch-details.>
 
 #### Implementation Steps
 
-<Populated by task-parallelizer — parallel phases for this milestone.>
+<Populated by parallelize-task — parallel phases for this milestone.>
 
 ...
 
@@ -171,7 +171,7 @@ if fetched from fetch-details.>
 
 1. Run the project linter and type-checker
 2. Run tests relevant to the changed code
-3. Invoke the code-reviewer subagent to review all changes
+3. Invoke the review-code subagent to review all changes
 4. Address any critical or improvement issues from the review
 5. Display a summary of changes for the user
 
@@ -200,7 +200,7 @@ Provide it with:
 - Instruction to return unresolved questions in its report instead of asking the
   user directly
 
-**Task 3 — Delegate to `task-parallelizer` subagent:**
+**Task 3 — Delegate to `parallelize-task` subagent:**
 Provide it with:
 
 - The implementation steps for **each milestone** from task 1
@@ -267,7 +267,7 @@ For each milestone in order, run the following loop:
 ##### 5a: Build
 
 Delegate the milestone's parallelized implementation steps to the
-`build-parallelizer` subagent. Provide it with:
+`parallelize-build` subagent. Provide it with:
 
 - The parallelized implementation steps (phased groups) for this milestone
 - The project root path
@@ -278,7 +278,7 @@ Delegate the milestone's parallelized implementation steps to the
 
 After receiving the build completion report:
 
-- If `build-parallelizer` reports unresolved questions or blockers, relay them
+- If `parallelize-build` reports unresolved questions or blockers, relay them
   to the user via the `question` tool, then re-run build for this milestone
   with the user's answers.
 - Resume from the affected step or phase when possible; do not restart the
@@ -288,8 +288,8 @@ After receiving the build completion report:
 
 Once the build completes, run the following two subagents in parallel:
 
-1. **`code-reviewer`** — provide it with the changed files and milestone context
-2. **`regression-checker`** — provide it with the milestone context; it will
+1. **`review-code`** — provide it with the changed files and milestone context
+2. **`check-regressions`** — provide it with the milestone context; it will
    scope itself to the current git diff automatically
 
 Collect both reports before proceeding.
@@ -298,8 +298,8 @@ Collect both reports before proceeding.
 
 Evaluate the review reports:
 
-- **If `code-reviewer` reports Critical Issues**: delegate fixes to
-  `build-parallelizer` with the Critical Issues list, affected files, and
+- **If `review-code` reports Critical Issues**: delegate fixes to
+  `parallelize-build` with the Critical Issues list, affected files, and
   milestone context. Then return to step 5b. Increment the loop counter.
 - **If only Improvements or Nitpicks**: skip them and proceed to commit.
 - **If both reports are clean**: proceed directly to step 5d.
@@ -344,7 +344,7 @@ After all milestones are committed:
 
 1. Run the project linter and type-checker.
 2. Run tests relevant to the changed code.
-3. Delegate one final pass to `code-reviewer` for the full task diff.
+3. Delegate one final pass to `review-code` for the full task diff.
 4. If final review returns Critical Issues, stop and surface them to the user.
    Do not create additional commits automatically in this phase.
 

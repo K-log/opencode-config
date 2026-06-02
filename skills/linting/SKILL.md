@@ -11,7 +11,7 @@ description: Linting and type checking standards. Run the project's tooling befo
 
 ## Code Review
 
-After completing non-trivial code changes, invoke the `code-reviewer` subagent to review the work.
+After completing non-trivial code changes, invoke the `review-code` subagent to review the work.
 Use judgment, skip this for trivial edits (single-line changes, config tweaks, typo fixes, etc.).
 
 Once the review is complete, present the findings to the user and ask which issues (if any) they want
