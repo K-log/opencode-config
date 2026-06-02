@@ -24,9 +24,9 @@ Example
 
 # <hh:mm dd-MM-yyyy> <Plan title>
 
-<Plan description>
+<plan description>
 
-<Plan details>
+<plan details>
 
 Example: Build the project as specified using the required schema from reference [1]
 

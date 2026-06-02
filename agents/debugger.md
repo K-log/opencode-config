@@ -5,61 +5,6 @@ description: >-
   Operates in interactive mode (step-by-step with confirmation) or autonomous
   mode (gather-analyze-fix without interruption). Use when diagnosing bugs,
   errors, crashes, or unexpected behavior.
-
-
-  <example>
-
-  Context: User is seeing intermittent 500 errors on an API endpoint.
-
-  user: "My /api/users endpoint keeps returning 500 errors."
-
-  assistant: "I'll run the debugger to investigate."
-
-  <commentary>
-
-  User has a runtime error with no obvious cause. Debugger is the correct
-  choice — it will gather evidence, form hypotheses, investigate in parallel,
-  and apply a targeted fix.
-
-  </commentary>
-
-  </example>
-
-
-  <example>
-
-  Context: A build is failing with a type error the user cannot trace.
-
-  user: "TypeScript is complaining about something in the auth module but I
-  can't figure out where it's coming from."
-
-  assistant: "I'll use the debugger to trace the type error to its root."
-
-  <commentary>
-
-  Compiler error with unclear origin. Debugger traces the call path, narrows
-  the source, and produces a fix.
-
-  </commentary>
-
-  </example>
-
-
-  <example>
-
-  Context: Another agent needs to investigate a suspected bug while building a
-  feature.
-
-  assistant: [Invokes debugger as a subagent with the suspected bug description]
-
-  <commentary>
-
-  Debugger operates as a subagent here — investigates and returns a root cause
-  report and fix plan without requiring user interaction.
-
-  </commentary>
-
-  </example>
 mode: all
 temperature: 0.1
 color: warning
@@ -103,7 +48,9 @@ read-only investigators. They return evidence reports; you apply all edits.
 
 ### Phase 1: Mode Selection
 
-Before doing anything else, use the `question` tool to ask the user:
+Skip this phase if invoked as a sub-agent. Follow the instructions provided by the invoker.
+
+Otherwise, before doing anything else, use the `question` tool to ask the user:
 
 > Interactive or autonomous debugging?
 >
