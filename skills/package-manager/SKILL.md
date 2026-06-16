@@ -1,6 +1,6 @@
 ---
 name: package-manager
-description: Select the correct package manager for a project across JavaScript/TypeScript, Python, Java, and Rust. Detect the active manager from lock files, manifests, and config, and prompt the user when none can be determined.
+description: Select the correct package manager for a project across JavaScript/TypeScript, Java, Rust, Go, and Lua. Detect the active manager from lock files, manifests, and config, and prompt the user when none can be determined.
 ---
 
 ## Package Manager Selection
@@ -78,57 +78,64 @@ confirm which to use and flag the stray files.
 
 ---
 
-## Python
+## Go
 
 ### Detection Order
 
-1. **Lock file** (strongest signal):
-
-   | Lock file        | Manager |
-   | ---------------- | ------- |
-   | `uv.lock`        | uv      |
-   | `poetry.lock`    | poetry  |
-   | `pdm.lock`       | pdm     |
-   | `Pipfile.lock`   | pipenv  |
-   | `conda-lock.yml` | conda   |
-
-2. **`pyproject.toml` tool table** — inspect which build/dependency tool owns it:
-
-   | Marker in `pyproject.toml` | Manager |
-   | -------------------------- | ------- |
-   | `[tool.uv]`                | uv      |
-   | `[tool.poetry]`            | poetry  |
-   | `[tool.pdm]`               | pdm     |
-   | `[tool.hatch]`             | hatch   |
-
-3. **Other manifests / config**:
-
-   | File                                  | Manager |
-   | ------------------------------------- | ------- |
-   | `Pipfile`                             | pipenv  |
-   | `environment.yml`, `environment.yaml` | conda   |
-   | `requirements*.txt` (only)            | pip     |
-
-4. **CI / scripts**: check `.github/workflows/`, `Makefile`, `tox.ini`,
-   `Dockerfile`, or `README` for invocations like `uv sync`, `poetry install`,
-   `pdm install`, `pipenv install`, `pip install -r`.
+1. **`go.mod`** present → Go Modules (effectively the only manager). `go.sum`
+   confirms locked dependency versions.
+2. **CI / scripts**: check `.github/workflows/`, `Makefile`, `Dockerfile`, or
+   `README` for `go build`, `go test`, `go get`, etc.
 
 ### Command Mapping
 
-| Action      | pip                               | poetry                | uv                | pdm                | pipenv                   |
-| ----------- | --------------------------------- | --------------------- | ----------------- | ------------------ | ------------------------ |
-| Install all | `pip install -r requirements.txt` | `poetry install`      | `uv sync`         | `pdm install`      | `pipenv install`         |
-| Add dep     | `pip install <pkg>`               | `poetry add <pkg>`    | `uv add <pkg>`    | `pdm add <pkg>`    | `pipenv install <pkg>`   |
-| Remove dep  | `pip uninstall <pkg>`             | `poetry remove <pkg>` | `uv remove <pkg>` | `pdm remove <pkg>` | `pipenv uninstall <pkg>` |
-| Run script  | `python <file>`                   | `poetry run <cmd>`    | `uv run <cmd>`    | `pdm run <cmd>`    | `pipenv run <cmd>`       |
+| Action     | Go Modules        |
+| ---------- | ----------------- |
+| Build      | `go build`        |
+| Run        | `go run`          |
+| Test       | `go test`         |
+| Add dep    | `go get <module>` |
+| Remove dep | `go mod tidy`     |
+| Check      | `go mod verify`   |
 
 ### Rules
 
-- Prefer the manager that owns `pyproject.toml`; a bare `requirements.txt`
-  alongside a `[tool.*]` table usually means the txt is generated/exported, not
-  the source of truth.
-- Do not mix `pip install` into a poetry/uv/pdm/pipenv-managed environment.
-- Respect the project's virtual environment; do not install into system Python.
+- Commit `go.mod` and `go.sum` together; they represent the dependency lock state.
+- Use `go get -u <module>` to upgrade; `go get <module>@version` for a specific
+  version.
+- Run `go mod tidy` after editing `go.mod` to sync `go.sum`.
+- Prefer `go get`/`go mod tidy` over hand-editing `go.mod`.
+
+---
+
+## Lua
+
+### Detection Order
+
+1. **`*.rockspec`** file present → LuaRocks (standard package manager).
+2. **`luarocks` config** (typically in `~/.config/luarocks/config.lua` or
+   project-specific `.luarocks/config.lua`).
+3. **CI / scripts**: check `.github/workflows/`, `Makefile`, `Dockerfile`, or
+   `README` for `luarocks install`, `luarocks build`, etc.
+
+### Command Mapping
+
+| Action     | LuaRocks                        |
+| ---------- | ------------------------------- |
+| Build      | `luarocks make [rockspec]`      |
+| Install    | `luarocks install <rockname>`   |
+| Test       | `lua test.lua` (or equiv.)      |
+| Add dep    | edit `dependencies` in rockspec |
+| Remove dep | edit `dependencies` in rockspec |
+| Search     | `luarocks search <term>`        |
+
+### Rules
+
+- Dependencies are declared in the `*.rockspec` file; edit directly or use
+  `luarocks` CLI to manage the `.luarocks/` cache and local installations.
+- Use local LuaRocks installs (via `luarocks install --local`) in projects to
+  avoid polluting the global environment.
+- Prefer explicit version pinning in `rockspec` dependencies.
 
 ---
 
