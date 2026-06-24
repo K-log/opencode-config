@@ -32,7 +32,7 @@ confirm which to use and flag the stray files.
 1. **Lock file** (strongest signal):
 
    | Lock file             | Package manager |
-   | --------------------- | --------------- |
+   |-----------------------|-----------------|
    | `bun.lockb`           | bun             |
    | `bun.lock`            | bun             |
    | `pnpm-lock.yaml`      | pnpm            |
@@ -40,13 +40,12 @@ confirm which to use and flag the stray files.
    | `package-lock.json`   | npm             |
    | `npm-shrinkwrap.json` | npm             |
 
-2. **`packageManager` field** in `package.json` (e.g.
-   `"packageManager": "pnpm@9.1.0"`). Corepack honors this.
+2. **`packageManager` field** in `package.json` (e.g. `"packageManager": "pnpm@9.1.0"`). Corepack honors this.
 
 3. **Manager-specific config files**:
 
    | File                                   | Package manager |
-   | -------------------------------------- | --------------- |
+   |----------------------------------------|-----------------|
    | `.npmrc`                               | npm             |
    | `.yarnrc`, `.yarnrc.yml`, `.yarn/`     | yarn            |
    | `pnpm-workspace.yaml`, `.pnpmfile.cjs` | pnpm            |
@@ -60,7 +59,7 @@ confirm which to use and flag the stray files.
 ### Command Mapping
 
 | Action          | npm                    | pnpm                | yarn                | bun                |
-| --------------- | ---------------------- | ------------------- | ------------------- | ------------------ |
+|-----------------|------------------------|---------------------|---------------------|--------------------|
 | Install all     | `npm install`          | `pnpm install`      | `yarn install`      | `bun install`      |
 | Add dep         | `npm install <pkg>`    | `pnpm add <pkg>`    | `yarn add <pkg>`    | `bun add <pkg>`    |
 | Add dev dep     | `npm install -D <pkg>` | `pnpm add -D <pkg>` | `yarn add -D <pkg>` | `bun add -d <pkg>` |
@@ -90,7 +89,7 @@ confirm which to use and flag the stray files.
 ### Command Mapping
 
 | Action     | Go Modules        |
-| ---------- | ----------------- |
+|------------|-------------------|
 | Build      | `go build`        |
 | Run        | `go run`          |
 | Test       | `go test`         |
@@ -121,7 +120,7 @@ confirm which to use and flag the stray files.
 ### Command Mapping
 
 | Action     | LuaRocks                        |
-| ---------- | ------------------------------- |
+|------------|---------------------------------|
 | Build      | `luarocks make [rockspec]`      |
 | Install    | `luarocks install <rockname>`   |
 | Test       | `lua test.lua` (or equiv.)      |
@@ -146,7 +145,7 @@ confirm which to use and flag the stray files.
 1. **Build file** (strongest signal):
 
    | File                                     | Manager / build tool |
-   | ---------------------------------------- | -------------------- |
+   |------------------------------------------|----------------------|
    | `build.gradle`, `build.gradle.kts`       | Gradle               |
    | `settings.gradle`, `settings.gradle.kts` | Gradle               |
    | `pom.xml`                                | Maven                |
@@ -154,7 +153,7 @@ confirm which to use and flag the stray files.
 2. **Wrapper scripts** (use these over a globally installed tool):
 
    | File                     | Manager |
-   | ------------------------ | ------- |
+   |--------------------------|---------|
    | `gradlew`, `gradlew.bat` | Gradle  |
    | `mvnw`, `mvnw.cmd`       | Maven   |
 
@@ -164,7 +163,7 @@ confirm which to use and flag the stray files.
 ### Command Mapping
 
 | Action         | Maven                              | Gradle                                   |
-| -------------- | ---------------------------------- | ---------------------------------------- |
+|----------------|------------------------------------|------------------------------------------|
 | Build          | `./mvnw package`                   | `./gradlew build`                        |
 | Compile        | `./mvnw compile`                   | `./gradlew assemble`                     |
 | Run tests      | `./mvnw test`                      | `./gradlew test`                         |
@@ -194,7 +193,7 @@ confirm which to use and flag the stray files.
 ### Command Mapping
 
 | Action     | Cargo                  |
-| ---------- | ---------------------- |
+|------------|------------------------|
 | Build      | `cargo build`          |
 | Run        | `cargo run`            |
 | Test       | `cargo test`           |

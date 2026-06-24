@@ -1,6 +1,6 @@
 ---
 name: react
-description: React coding standards. Prefer functional components and hooks, strongly type all props and state.
+description: React coding standards. ALWAYS use when when working with React code.
 ---
 
 ## React
@@ -13,6 +13,9 @@ description: React coding standards. Prefer functional components and hooks, str
   - Context can poorly affect performance when incorrectly setup.
 
 ## Reference
+
+REQUIRED: Always check the current React version in use.
+REQUIRED: Always refresh knowledge of React documentation for the current React version in use.
 
 - [React Documentation](https://react.dev) — use for latest / unspecified versions
 - [React 18 Docs](https://18.react.dev/)

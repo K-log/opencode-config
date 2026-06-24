@@ -1,8 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "instructions": [
-    "rules.md"
-  ],
+  "instructions": [],
   "plugin": [
     "@franlol/opencode-md-table-formatter@latest"
   ],
@@ -112,11 +110,6 @@
     "jira": {
       "type": "remote",
       "url": "https://mcp.atlassian.com/v1/mcp",
-      "enabled": true
-    },
-    "firefox-live": {
-      "type": "local",
-      "command": ["npx", "-y", "@mozilla/firefox-devtools-mcp-moz"],
       "enabled": true
     }
   }

@@ -63,6 +63,8 @@ If the task description is missing or ambiguous:
 
 An identifier is never required.
 
+Once the task is understood, use the `question` tool to ask whether to run automated tests after building. Store the answer; use it in Phase 6 to decide whether to run tests.
+
 ---
 
 #### Phase 2: Research
@@ -104,10 +106,9 @@ After receiving the analysis report:
 
 ---
 
-#### Phase 4: Synthesize Plan, Test Planning, and Parallelization
+#### Phase 4: Synthesize Plan and Parallelization
 
-Run the following three tasks. Start task 1 immediately. Once task 1 completes,
-start tasks 2 and 3 in parallel.
+Run the following two tasks in parallel.
 
 **Task 1 — Synthesize the implementation plan:**
 Combine the research and analysis reports into a structured implementation
@@ -170,37 +171,12 @@ if fetched from fetch-details.>
 ## Post-Implementation
 
 1. Run the project linter and type-checker
-2. Run tests relevant to the changed code
-3. Invoke the review-code subagent to review all changes
-4. Address any critical or improvement issues from the review
-5. Display a summary of changes for the user
-
-## Test Plan
-
-### Manual Testing
-
-> Placeholder — replaced by plan-feature-tests output.
-
-### Automated Tests
-
-> Placeholder — replaced by plan-feature-tests output.
-
-### Custom Test Agents
-
-> Placeholder — replaced by plan-feature-tests output.
+2. Invoke the review-code subagent to review all changes
+3. Address any critical or improvement issues from the review
+4. Display a summary of changes for the user
 ```
 
-**Task 2 — Delegate to `plan-feature-tests` subagent:**
-Provide it with:
-
-- The task description (enriched with fetched context if available)
-- The project root path
-- Research findings from Phase 2
-- Codebase analysis from Phase 3
-- Instruction to return unresolved questions in its report instead of asking the
-  user directly
-
-**Task 3 — Delegate to `parallelize-task` subagent:**
+**Task 2 — Delegate to `parallelize-task` subagent:**
 Provide it with:
 
 - The implementation steps for **each milestone** from task 1
@@ -211,18 +187,17 @@ Provide it with:
 - Instruction to return unresolved questions in its report instead of asking the
   user directly
 
-After Tasks 2 and 3 complete:
+After Tasks 1 and 2 complete:
 
 - If either task returns questions, relay them to the user via the `question`
   tool, then re-run only the task(s) that asked questions with the user's
   answers.
 - Repeat until both tasks have no unresolved questions.
 
-Once all three tasks complete:
+Once both tasks complete:
 
-- Merge the parallelized steps from task 3 into each milestone's
+- Merge the parallelized steps from task 2 into each milestone's
   `#### Implementation Steps` section
-- Merge the test plan from task 2 into `## Test Plan`
 - Write the plan to `.opencode/plans/<identifier-or-slug>.md` automatically.
 
 Present the plan summary to the user using this format:
@@ -242,12 +217,6 @@ Present the plan summary to the user using this format:
 > **Key dependencies**: <package@version, ...>
 >
 > **Follows patterns from**: `<file:line>`, ...
->
-> **Test scenarios** (<N> manual, <N> automated):
->
-> - <key manual steps>
->
-> **Custom test agents**: <names or "None detected">
 
 ---
 
@@ -343,7 +312,7 @@ user declines commit and session ends).
 After all milestones are committed:
 
 1. Run the project linter and type-checker.
-2. Run tests relevant to the changed code.
+2. If the user opted in to automated tests in Phase 1, run tests relevant to the changed code.
 3. Delegate one final pass to `review-code` for the full task diff.
 4. If final review returns Critical Issues, stop and surface them to the user.
    Do not create additional commits automatically in this phase.
@@ -352,7 +321,6 @@ Once all milestones are committed, present a final summary to the user:
 
 - List of commits made (hash + message)
 - Any Improvements or Nitpicks from the review reports that were skipped
-- Test plan from the plan file for manual verification
 
 ---
 

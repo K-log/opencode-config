@@ -1,6 +1,6 @@
 ---
 name: building
-description: Best practices for building
+description: Use when starting to build out a plan or requested change.
 ---
 
 When building out a plan, follow these core principles:

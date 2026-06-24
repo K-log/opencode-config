@@ -1,6 +1,6 @@
 ---
 name: planning
-description: Best practices for creating plans.
+description: Use when working on any task that involves multiple steps or a plan. 
 ---
 
 When working on any task that involves multiple steps or a plan:
