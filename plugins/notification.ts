@@ -1,12 +1,19 @@
 import type { Plugin } from "@opencode-ai/plugin"
+import type {
+  Todo,
+  Session,
+  Permission,
+} from "@opencode-ai/sdk/dist/gen/types.gen"
 import { existsSync } from "node:fs"
 import { spawn, spawnSync } from "node:child_process"
 
-// Notify the user when a session goes idle (task complete) or errors.
+// Notify the user when a session goes idle (task complete), requires action,
+// or errors. Rich body: session title, todo summary, permission details.
+//
 // Cross-platform: macOS (osascript), Linux (notify-send + paplay), Windows (PowerShell WinRT toast).
 //
 // Linux / KDE Plasma 6 notes:
-//   - urgency: normal (idle) / critical (error) — critical never auto-expires on KDE
+//   - urgency: normal (idle) / critical (error/permission) — critical never auto-expires on KDE
 //   - icon: freedesktop icon names resolved via the active icon theme (Breeze etc.)
 //   - sound: KDE ignores sound-name DBus hints; paplay is used separately via PipeWire/PulseAudio
 //   - sound-theme-freedesktop package must be installed for .oga paths to exist
@@ -85,18 +92,109 @@ const SOUNDS = {
   error: "/usr/share/sounds/freedesktop/stereo/dialog-error.oga",
 } as const
 
+// Per-session state
+const sessionTitles = new Map<string, string>()
+const sessionTodos = new Map<string, Todo[]>()
+
+function buildTodoSummary(todos: Todo[]): string {
+  if (todos.length === 0) return ""
+
+  const completed = todos.filter((t) => t.status === "completed")
+  const inProgress = todos.filter((t) => t.status === "in_progress")
+  const pending = todos.filter((t) => t.status === "pending")
+
+  const parts: string[] = []
+
+  if (completed.length > 0) {
+    parts.push(`${completed.length}/${todos.length} done`)
+  }
+
+  // Surface the active/pending task by name (first one, truncated)
+  const active = inProgress[0] ?? pending[0]
+  if (active) {
+    const label = active.content.length > 60
+      ? active.content.slice(0, 57) + "..."
+      : active.content
+    parts.push(`waiting: ${label}`)
+  }
+
+  return parts.join(" · ")
+}
+
+function buildErrorMessage(error: unknown): string {
+  if (!error || typeof error !== "object") return "Session encountered an error"
+  const e = error as { data?: { message?: string }; name?: string }
+  return e.data?.message ?? e.name ?? "Session encountered an error"
+}
+
 // Debounce: session.idle / session.error can fire multiple times in rapid succession.
 let lastIdleAt = 0
 let lastErrorAt = 0
 const DEBOUNCE_MS = 2000
 
+// Track permission IDs we've already notified for (cleared on reply)
+const notifiedPermissions = new Set<string>()
+
 export const NotificationPlugin: Plugin = async () => ({
   event: async ({ event }) => {
+    // Cache session title
+    if (event.type === "session.created" || event.type === "session.updated") {
+      const info = (event as { type: string; properties: { info: Session } }).properties.info
+      if (info?.id && info?.title) {
+        sessionTitles.set(info.id, info.title)
+      }
+    }
+
+    // Cache todos
+    if (event.type === "todo.updated") {
+      const props = (event as { type: string; properties: { sessionID: string; todos: Todo[] } }).properties
+      sessionTodos.set(props.sessionID, props.todos)
+    }
+
+    // Action required: permission gate opened
+    if (event.type === "permission.updated") {
+      const perm = (event as { type: string; properties: Permission }).properties
+      if (notifiedPermissions.has(perm.id)) return
+      notifiedPermissions.add(perm.id)
+
+      const title = sessionTitles.get(perm.sessionID)
+      const notifTitle = title ? `opencode — action required` : `opencode — action required`
+      const pattern = Array.isArray(perm.pattern)
+        ? perm.pattern.join(", ")
+        : perm.pattern ?? ""
+      const body = [
+        title,
+        perm.title || perm.type,
+        pattern ? `(${pattern})` : "",
+      ].filter(Boolean).join(" · ")
+
+      notify(notifTitle, body || undefined, {
+        urgency: "critical",
+        icon: "dialog-question",
+      })
+    }
+
+    // Clear permission tracking on reply
+    if (event.type === "permission.replied") {
+      const props = (event as { type: string; properties: { permissionID: string } }).properties
+      notifiedPermissions.delete(props.permissionID)
+    }
+
+    // Session complete
     if (event.type === "session.idle") {
       const now = Date.now()
       if (now - lastIdleAt < DEBOUNCE_MS) return
       lastIdleAt = now
-      notify("opencode", "Session complete", {
+
+      const props = (event as { type: string; properties: { sessionID: string } }).properties
+      const sessionTitle = sessionTitles.get(props.sessionID)
+      const todos = sessionTodos.get(props.sessionID) ?? []
+      const todoSummary = buildTodoSummary(todos)
+
+      const notifTitle = sessionTitle ? `opencode — ${sessionTitle}` : `opencode`
+      const body = todoSummary || "Session complete"
+
+      notify(notifTitle, body, {
         urgency: "normal",
         icon: "dialog-information",
         soundPath: SOUNDS.complete,
@@ -104,12 +202,19 @@ export const NotificationPlugin: Plugin = async () => ({
       })
     }
 
+    // Session error
     if (event.type === "session.error") {
       const now = Date.now()
       if (now - lastErrorAt < DEBOUNCE_MS) return
       lastErrorAt = now
-      const err = (event as { type: "session.error"; error?: string }).error
-      notify("opencode — error", err ?? "Session encountered an error", {
+
+      const props = (event as { type: string; properties: { sessionID?: string; error?: unknown } }).properties
+      const sessionTitle = props.sessionID ? sessionTitles.get(props.sessionID) : undefined
+      const notifTitle = sessionTitle
+        ? `opencode — error · ${sessionTitle}`
+        : `opencode — error`
+
+      notify(notifTitle, buildErrorMessage(props.error), {
         urgency: "critical",
         icon: "dialog-error",
         soundPath: SOUNDS.error,
