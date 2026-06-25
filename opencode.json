@@ -2,11 +2,12 @@
   "$schema": "https://opencode.ai/config.json",
   "instructions": [],
   "plugin": [
-    "@franlol/opencode-md-table-formatter@latest"
+    "@franlol/opencode-md-table-formatter@0.0.6"
   ],
   "snapshot": false,
   "compaction": {
-    "reserved": 20000
+    "reserved": 10000,
+    "prune": true
   },
   "experimental": {
     "batch_tool": true,
@@ -105,7 +106,7 @@
     "figma": {
       "type": "remote",
       "url": "http://127.0.0.1:3845/mcp",
-      "enabled": true
+      "enabled": false
     },
     "jira": {
       "type": "remote",
