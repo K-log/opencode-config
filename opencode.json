@@ -74,15 +74,6 @@
         }
       },
       "options": {}
-    },
-    "parallelize-build": {
-      "model": "small_model"
-    },
-    "plan-feature-tests": {
-      "model": "small_model"
-    },
-    "parallelize-task": {
-      "model": "small_model"
     }
   },
   "formatter": {
