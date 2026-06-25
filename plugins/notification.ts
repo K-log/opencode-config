@@ -95,6 +95,8 @@ const SOUNDS = {
 // Per-session state
 const sessionTitles = new Map<string, string>()
 const sessionTodos = new Map<string, Todo[]>()
+// Sessions with a parentID are subagent tasks — suppress notifications for them
+const subagentSessions = new Set<string>()
 
 function buildTodoSummary(todos: Todo[]): string {
   if (todos.length === 0) return ""
@@ -143,6 +145,18 @@ export const NotificationPlugin: Plugin = async () => ({
       if (info?.id && info?.title) {
         sessionTitles.set(info.id, info.title)
       }
+      if (info?.parentID) {
+        subagentSessions.add(info.id)
+      }
+    }
+
+    if (event.type === "session.deleted") {
+      const info = (event as { type: string; properties: { info: Session } }).properties.info
+      if (info?.id) {
+        sessionTitles.delete(info.id)
+        sessionTodos.delete(info.id)
+        subagentSessions.delete(info.id)
+      }
     }
 
     // Cache todos
@@ -154,6 +168,7 @@ export const NotificationPlugin: Plugin = async () => ({
     // Action required: permission gate opened
     if (event.type === "permission.updated") {
       const perm = (event as { type: string; properties: Permission }).properties
+      if (subagentSessions.has(perm.sessionID)) return
       if (notifiedPermissions.has(perm.id)) return
       notifiedPermissions.add(perm.id)
 
@@ -187,6 +202,7 @@ export const NotificationPlugin: Plugin = async () => ({
       lastIdleAt = now
 
       const props = (event as { type: string; properties: { sessionID: string } }).properties
+      if (subagentSessions.has(props.sessionID)) return
       const sessionTitle = sessionTitles.get(props.sessionID)
       const todos = sessionTodos.get(props.sessionID) ?? []
       const todoSummary = buildTodoSummary(todos)
@@ -209,6 +225,7 @@ export const NotificationPlugin: Plugin = async () => ({
       lastErrorAt = now
 
       const props = (event as { type: string; properties: { sessionID?: string; error?: unknown } }).properties
+      if (props.sessionID && subagentSessions.has(props.sessionID)) return
       const sessionTitle = props.sessionID ? sessionTitles.get(props.sessionID) : undefined
       const notifTitle = sessionTitle
         ? `opencode — error · ${sessionTitle}`
