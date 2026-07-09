@@ -3,9 +3,8 @@
   "instructions": [],
   "plugin": [
     "@franlol/opencode-md-table-formatter@0.0.6",
-    "./plugins/notification.ts"
   ],
-  "snapshot": false,
+  "snapshot": true,
   "compaction": {
     "reserved": 10000,
     "prune": true
@@ -14,6 +13,7 @@
     "batch_tool": true,
     "openTelemetry": false
   },
+  "lsp": { },
   "default_agent": "plan",
   "permission": {
     "bash": {
