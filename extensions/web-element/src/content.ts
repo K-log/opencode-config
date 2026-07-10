@@ -75,7 +75,7 @@ if ((window as any).__webElementPickerLoaded) {
     }
   }
 
-  function handleClick(event: MouseEvent): void {
+  async function handleClick(event: MouseEvent): Promise<void> {
     const target = event.target
     if (!(target instanceof Element) || target === overlay) return
 
@@ -83,9 +83,14 @@ if ((window as any).__webElementPickerLoaded) {
     event.stopPropagation()
 
     const payload = buildCapture(target)
-    api.runtime.sendMessage({ type: "ELEMENT_CAPTURED", payload })
-
-    stopPicking()
+    try {
+      const result = await api.runtime.sendMessage({ type: "ELEMENT_CAPTURED", payload })
+      if (!result?.ok) console.error("[web-element] capture failed:", result?.error ?? "unknown error")
+    } catch (err) {
+      console.error("[web-element] capture failed:", err)
+    } finally {
+      stopPicking()
+    }
   }
 
   function handleKeyDown(event: KeyboardEvent): void {

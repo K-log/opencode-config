@@ -41,15 +41,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const select = document.getElementById("session-select") as HTMLSelectElement
   const pickButton = document.getElementById("pick-button") as HTMLButtonElement
 
-  const response = await api.runtime.sendMessage({ type: "DISCOVER" })
-  const instances = response?.instances ?? []
-
-  if (instances.length === 0) {
-    setStatus("No opencode sessions found. Is opencode running?")
-  } else {
-    populateSelect(select, instances)
-  }
-
   pickButton.addEventListener("click", async () => {
     const value = select.value
     if (!value) {
@@ -58,24 +49,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const [portStr, sessionID] = value.split("|")
-    const [tab] = await api.tabs.query({ active: true, currentWindow: true })
-    if (!tab?.id) {
-      setStatus("No active tab found.")
-      return
+
+    try {
+      const [tab] = await api.tabs.query({ active: true, currentWindow: true })
+      if (!tab?.id) {
+        setStatus("No active tab found.")
+        return
+      }
+
+      const result = await api.runtime.sendMessage({
+        type: "INJECT_PICKER",
+        tabId: tab.id,
+        port: Number(portStr),
+        sessionID,
+      })
+
+      if (!result?.ok) {
+        setStatus(result?.error ?? "Failed to start picker.")
+        return
+      }
+
+      window.close()
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : "Failed to start picker.")
     }
-
-    const result = await api.runtime.sendMessage({
-      type: "INJECT_PICKER",
-      tabId: tab.id,
-      port: Number(portStr),
-      sessionID,
-    })
-
-    if (!result?.ok) {
-      setStatus(result?.error ?? "Failed to start picker.")
-      return
-    }
-
-    window.close()
   })
+
+  try {
+    const response = await api.runtime.sendMessage({ type: "DISCOVER" })
+    const instances = response?.instances ?? []
+
+    if (instances.length === 0) {
+      setStatus("No opencode sessions found. Is opencode running?")
+    } else {
+      populateSelect(select, instances)
+    }
+  } catch (err) {
+    setStatus(err instanceof Error ? err.message : "Failed to discover opencode sessions.")
+  }
 })
