@@ -65,6 +65,21 @@ An identifier is never required.
 
 Once the task is understood, use the `question` tool to ask whether to run automated tests after building. Store the answer; use it in Phase 6 to decide whether to run tests.
 
+`Read` `~/.config/opencode/cache/auto-models.json` to check whether dynamic
+cost-tier model selection is enabled for this session. This flag is set only
+by the `/auto-models enable|disable` command — never toggle it yourself.
+
+- If the file is missing, or `enabled` is `false`: dynamic model selection is
+  **off**. Do not load the `model-tiers` skill and do not read
+  `model-tiers.json`. Implementation steps stay untagged in Phase 4, so
+  `parallelize-build` runs every task on its default (`build-mid`) tier.
+- If `enabled` is `true`: dynamic model selection is **on**. Load the
+  `model-tiers` skill and `Read` the cache file at
+  `~/.config/opencode/cache/model-tiers.json` to learn the current cost
+  tiers. Follow the skill's fallback rule if that file is missing. Do not
+  attempt to refresh it yourself — refreshing is a manual-only operation via
+  `/update-model-tiers`.
+
 ---
 
 #### Phase 2: Research
@@ -130,6 +145,15 @@ Guidelines for milestone boundaries:
 - Avoid milestones that leave the codebase in a broken state.
 - Avoid milestones so granular they are not worth a separate commit.
 
+If dynamic model selection is enabled (per Phase 1), use the `model-tiers`
+skill's classification heuristics to tag each implementation step with
+`[tier: cheap]`, `[tier: mid]`, or `[tier: powerful]` before merging into the
+plan. This tier travels with the task through `parallelize-task` and
+`parallelize-build`.
+
+If dynamic model selection is disabled, leave implementation steps untagged.
+`parallelize-build` defaults every untagged task to `build-mid`.
+
 Use this format for the plan file:
 
 ```
@@ -156,7 +180,9 @@ if fetched from fetch-details.>
 
 #### Implementation Steps
 
-<Populated by parallelize-task — parallel phases for this milestone.>
+<Populated by parallelize-task — parallel phases for this milestone. Each
+task item carries a [tier: cheap|mid|powerful] tag if dynamic model
+selection is enabled, otherwise untagged.>
 
 ### Milestone 2: <short title>
 
@@ -164,7 +190,9 @@ if fetched from fetch-details.>
 
 #### Implementation Steps
 
-<Populated by parallelize-task — parallel phases for this milestone.>
+<Populated by parallelize-task — parallel phases for this milestone. Each
+task item carries a [tier: cheap|mid|powerful] tag if dynamic model
+selection is enabled, otherwise untagged.>
 
 ...
 
@@ -238,7 +266,9 @@ For each milestone in order, run the following loop:
 Delegate the milestone's parallelized implementation steps to the
 `parallelize-build` subagent. Provide it with:
 
-- The parallelized implementation steps (phased groups) for this milestone
+- The parallelized implementation steps (phased groups) for this milestone,
+  including each task's `[tier: ...]` tag if dynamic model selection is
+  enabled
 - The project root path
 - The path to the plan file
 - The milestone number and title for context
@@ -338,6 +368,14 @@ Once all milestones are committed, present a final summary to the user:
 - Implementation steps must be specific enough that subagents do not need to
   re-research the codebase. Include file paths, function names, and pattern
   references.
+- You never decide model tiering yourself. Dynamic cost-tier model selection
+  only runs when `~/.config/opencode/cache/auto-models.json` has
+  `enabled: true`, a flag set exclusively by the `/auto-models` command.
+  When enabled, tag every implementation step with a
+  `[tier: cheap|mid|powerful]` label per the `model-tiers` skill before it
+  reaches `parallelize-build`. When disabled (or the file is missing), leave
+  steps untagged and never load the `model-tiers` skill or read
+  `model-tiers.json`.
 - Always include the post-implementation section with review steps.
 - The plan targets the current branch unless the user specifies otherwise.
 - Never use emojis.
