@@ -1,0 +1,36 @@
+{
+  "updated": "2026-07-10T18:11:42Z",
+  "filter": "recommended-family (opencode.ai/docs/models), authenticated providers only",
+  "tiers": {
+    "cheap": {
+      "model": "github-copilot/gpt-5-mini",
+      "cost_input": 0.25,
+      "cost_output": 2
+    },
+    "mid": {
+      "model": "github-copilot/gpt-5.4",
+      "cost_input": 2.5,
+      "cost_output": 15
+    },
+    "powerful": {
+      "model": "github-copilot/claude-opus-4.8",
+      "cost_input": 5,
+      "cost_output": 25
+    }
+  },
+  "candidates_considered": [
+    "github-copilot/gpt-5-mini",
+    "github-copilot/gpt-5.4-mini",
+    "github-copilot/claude-haiku-4.5",
+    "github-copilot/gpt-5.3-codex",
+    "github-copilot/claude-sonnet-5",
+    "github-copilot/gemini-3.1-pro-preview",
+    "github-copilot/gpt-5.4",
+    "github-copilot/claude-sonnet-4.5",
+    "github-copilot/claude-sonnet-4.6",
+    "github-copilot/gpt-5.5",
+    "github-copilot/claude-opus-4.5",
+    "github-copilot/claude-opus-4.8",
+    "github-copilot/claude-opus-4.8-fast"
+  ]
+}
