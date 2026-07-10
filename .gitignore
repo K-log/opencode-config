@@ -1,0 +1,7 @@
+node_modules
+package.json
+package-lock.json
+bun.lock
+.gitignore
+!extensions/web-element/package.json
+!extensions/web-element/.gitignore

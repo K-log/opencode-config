@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "opencode Web Element Picker",
+  "version": "1.0.0",
+  "description": "Pick a DOM element in the browser and reference it in an opencode chat session.",
+  "background": {
+    "scripts": ["dist/background.js"],
+    "service_worker": "dist/background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["http://127.0.0.1/*"],
+  "externally_connectable": {},
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "web-element@opencode.local"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}
