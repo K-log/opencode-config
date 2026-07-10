@@ -61,6 +61,10 @@ for the selected session (`N` increments per session).
   extension's console (chrome://extensions -> service worker -> inspect) or
   the page's console for `[web-element]`-prefixed warnings if a capture
   seems incomplete.
+- If you pick a session other than the one currently focused in the opencode
+  TUI, the extension will show a warning instead of auto-inserting the
+  token — you'll need to switch to that session and type `@web-element-N`
+  manually.
 
 ## Development
 

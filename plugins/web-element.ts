@@ -38,6 +38,10 @@ const injectedMessageIDs = new Set<string>()
 
 // No "active session" API exists in @opencode-ai/sdk — approximate by
 // tracking the most recent sessionID seen across event hook invocations.
+// Also doubles as the gate for whether client.tui.appendPrompt is safe to
+// call: that endpoint has no sessionID param and always targets whichever
+// session is currently focused in the connected TUI, so it must only be
+// used when it matches this heuristic.
 let lastActiveSessionID: string | undefined
 
 // The extension has no filesystem access to discover the bridge, so it
@@ -203,21 +207,43 @@ export const WebElementPlugin: Plugin = async ({ client, project }) => {
       elementsBySession.set(body.sessionID, existing)
       const count = existing.length
 
-      try {
-        await client.tui.appendPrompt({ body: { text: `@web-element-${count} ` } })
-      } catch {
-        // best-effort — TUI may be unavailable
-      }
+      if (body.sessionID === lastActiveSessionID) {
+        try {
+          await client.tui.appendPrompt({ body: { text: `@web-element-${count} ` } })
+        } catch {
+          // best-effort — TUI may be unavailable
+        }
 
-      try {
-        await client.tui.showToast({
-          body: {
-            message: `Captured element as @web-element-${count}`,
-            variant: "success",
-          },
-        })
-      } catch {
-        // best-effort — TUI may be unavailable
+        try {
+          await client.tui.showToast({
+            body: {
+              message: `Captured element as @web-element-${count}`,
+              variant: "success",
+            },
+          })
+        } catch {
+          // best-effort — TUI may be unavailable
+        }
+      } else {
+        let sessionLabel = body.sessionID
+        try {
+          const result = await client.session.list()
+          const match = result.data?.find((s) => s.id === body.sessionID)
+          if (match?.title) sessionLabel = match.title
+        } catch {
+          // best-effort — fall back to raw sessionID if lookup fails
+        }
+
+        try {
+          await client.tui.showToast({
+            body: {
+              message: `Captured as @web-element-${count} for session "${sessionLabel}" — switch to it and type @web-element-${count} manually.`,
+              variant: "warning",
+            },
+          })
+        } catch {
+          // best-effort — TUI may be unavailable
+        }
       }
 
       return Response.json({ ok: true, count }, { headers: corsHeaders() })
