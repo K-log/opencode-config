@@ -5,7 +5,7 @@ description: >-
   an existing pattern exactly. Invoked by parallelize-build for tasks tagged
   [tier: cheap]. Do not use for ambiguous or high-risk changes.
 mode: subagent
-model: github-copilot/gpt-5-mini
+model: github-copilot/gpt-5.4-nano
 temperature: 0.1
 permission:
   read: allow

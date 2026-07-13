@@ -83,6 +83,11 @@ Structure your output as:
 - Task D (depends on A)
 - Task E (depends on B)
 
+If input tasks already carry a `[tier: cheap|mid|powerful]` annotation,
+preserve it unchanged on the corresponding output task. Do not add, remove, or
+guess at tier annotations yourself — tiering is the orchestrator's
+responsibility.
+
 ### Diff
 
 - Include a directory structure diagram of all planned modifications to the project.

@@ -6,7 +6,7 @@ description: >-
   or build-mid report a blocker. Invoked by parallelize-build for tasks tagged
   [tier: powerful].
 mode: subagent
-model: github-copilot/claude-opus-4.8
+model: github-copilot/gpt-5.6-sol
 temperature: 0.1
 permission:
   read: allow

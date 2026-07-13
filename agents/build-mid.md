@@ -4,7 +4,7 @@ description: >-
   business logic — the default tier when a task's risk/complexity is unclear.
   Invoked by parallelize-build for tasks tagged [tier: mid] or untagged tasks.
 mode: subagent
-model: github-copilot/gpt-5.4
+model: github-copilot/claude-sonnet-5
 temperature: 0.1
 permission:
   read: allow
