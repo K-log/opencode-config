@@ -45,25 +45,7 @@
   },
   "agent": {
     "build": {
-      "permission": {
-        "bash": {
-          "rm*": "deny",
-          "rmdir *": "deny",
-          "mkfs *": "deny",
-          "dd *": "deny",
-          "chmod -R *": "deny",
-          "chown -R *": "deny",
-          "git clean *": "deny",
-          "git checkout -- *": "deny",
-          "git reset --hard*": "deny",
-          "git push --force*": "deny",
-          "git push -f *": "deny",
-          "truncate *": "deny",
-          "shred *": "deny",
-          "*": "allow"
-        }
-      },
-      "options": {}
+      "mode": "all"
     },
     "plan": {
       "permission": {

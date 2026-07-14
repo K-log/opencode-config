@@ -5,11 +5,13 @@ description: Use when working on any task that involves multiple steps or a plan
 
 When working on any task that involves multiple steps or a plan:
 
-1. Use the `parallelize-task` agent (via the Task tool) to restructure
-   implementation steps into parallel phases after the orchestrator or
-   planner has synthesized the initial approach. The orchestrator may
-   synthesize the initial plan directly, without delegation, before handing
-   steps to `parallelize-task`.
+1. Optionally use the `parallelize-task` agent (via the Task tool) to
+   restructure implementation steps into parallel phases after the
+   orchestrator or planner has synthesized the initial approach. The
+   orchestrator synthesizes the initial plan directly, without delegation.
+   Only delegate to `parallelize-task` when the plan contains independent
+   work that materially benefits from parallelization — it is not required
+   for every plan.
 2. Save the plan output to `.opencode/plans/<descriptive-name>.md` at the start of the task.
 3. The plan file must include a progress section listing each task with a status marker:
    - `[ ]` pending
