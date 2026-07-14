@@ -66,7 +66,7 @@ Then move on to the next phase.
   - Mermaid diagram of call stack or component hierarchy.
   - Visual examples of any graphical assets.
   - Steps to verify the plan has been correctly executed such as builds have passed or a specific change has been made.
-- Present the plan to the user for review and save plan to `.opencode/plans/<plan-name>.md`
+- Present the plan to the user for review and save plan to `docs/plans/<plan-name>.md` unless the project specified a different directory.
 - Proceed to phase 4 once the plan is approved.
 
 # Phase 4: Building
