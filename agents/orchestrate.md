@@ -390,19 +390,21 @@ along with the exact
 that would be
 run.
 
-If commit-style context is insufficient, use `/git-commit` as the source of
-truth for commit message style and execution. `/git-commit` performs its own
-staged-diff check and user confirmation before committing; the staging step
-above only ensures the correct files are staged going into that command.
+If commit-style context is insufficient, delegate to the `build` subagent to
+inspect recent commit history and report the applicable message style before
+drafting the command. The staging step above ensures the correct files are
+staged for the delegated commit execution.
 
 After printing the changes and command, use the `question` tool to ask whether
 to commit the milestone now.
 
-- If user confirms, commit using the `/git-commit` slash command, mark that
-  milestone `- [x]` and the next milestone `- [~]` (or `- [~] Final
-validation` if this was the last milestone) in the plan's `## Task
-progress`, refresh the `Last updated` timestamp, and proceed to the next
-  milestone.
+- If user confirms, delegate the exact commit command to the `build`
+  subagent. Require it to verify the staged diff, execute the commit, and
+  report the resulting commit hash. Do not execute `git commit` or invoke
+  `/git-commit` yourself. After successful execution, mark that milestone
+  `- [x]` and the next milestone `- [~]` (or `- [~] Final validation` if this
+  was the last milestone) in the plan's `## Task progress`, refresh the
+  `Last updated` timestamp, and proceed to the next milestone.
 - If user declines, end the session without committing and clearly report:
   uncommitted files, pending milestone, and that execution stopped by user
   choice.
@@ -568,9 +570,10 @@ open questions`, and `## Task progress` to reflect the change, refresh the
   no dynamic model routing; `build` is OpenCode's built-in build agent, a
   local mode-only override in `opencode.json` exposes it to subagent
   delegation, and the runtime default model applies.
-- The orchestrator never stages files itself (no bash permission). Staging
-  before commit (5d) is always delegated to the `build` subagent, scoped to
-  the reviewed, intended files only.
+- The orchestrator never stages or commits files itself (no bash permission),
+  and never invokes `/git-commit`. Staging and, after user confirmation,
+  commit execution in 5d are always delegated to the `build` subagent, scoped
+  to the reviewed, intended files only.
 - `parallelize-task` is available only as an optional planning utility during
   Phase 4, for restructuring a milestone's steps into parallel phases when
   independent work materially benefits from parallelization. It is never
