@@ -35,31 +35,17 @@
       "node --version": "allow",
       "npm --version": "allow",
       "bun --version": "allow"
+    },
+    "external_directory": {
+      "~/.cache/opencode/**": "allow"
+    },
+    "read": {
+      "~/.cache/opencode/**": "allow"
     }
   },
   "agent": {
     "build": {
-      "permission": {
-        "bash": {
-          "rm *": "deny",
-          "rm -rf *": "deny",
-          "rm -f *": "deny",
-          "rmdir *": "deny",
-          "mkfs *": "deny",
-          "dd *": "deny",
-          "chmod -R *": "deny",
-          "chown -R *": "deny",
-          "git clean *": "deny",
-          "git checkout -- *": "deny",
-          "git reset --hard*": "deny",
-          "git push --force*": "deny",
-          "git push -f *": "deny",
-          "truncate *": "deny",
-          "shred *": "deny",
-          "*": "allow"
-        }
-      },
-      "options": {}
+      "mode": "all"
     },
     "plan": {
       "permission": {
@@ -78,17 +64,8 @@
   },
   "formatter": {
     "prettier-markdown": {
-      "command": [
-        "npx",
-        "-y",
-        "prettier",
-        "--write",
-        "$FILE"
-      ],
-      "extensions": [
-        ".md",
-        ".mdx"
-      ],
+      "command": ["npx", "-y", "prettier", "--write", "$FILE"],
+      "extensions": [".md", ".mdx"],
       "environment": {
         "NODE_ENV": "production"
       }
@@ -98,12 +75,12 @@
     "figma": {
       "type": "remote",
       "url": "http://127.0.0.1:3845/mcp",
-      "enabled": false
+      "enabled": true
     },
     "jira": {
       "type": "remote",
       "url": "https://mcp.atlassian.com/v1/mcp",
-      "enabled": false
+      "enabled": true
     }
   }
 }

@@ -8,10 +8,10 @@ agent: build
 - If nothing is staged, run `git status` and report what is unstaged — do not proceed.
 - Draft a commit message that follows the inferred style. If the current branch name contains a ticket number (e.g. `PROJ-1234`), prefix the message with it in brackets: `[PROJ-1234] message`.
 - Present the proposed commit message to the user via the `question` tool and ask for approval before committing.
-- Command to run: `AI_ASSIST=yes AI_MODE=generated git commit -m "<message>"`
+- Command to run: `AI_ASSIST=yes AI_TOOL=opencode AI_MODE=generated git commit -m "<subject>"` (or, with a description, `AI_ASSIST=yes AI_TOOL=opencode AI_MODE=generated git commit -m "<subject>" -m "<description>"`).
 - On rejection or edit request, revise the message and re-present via `question` tool before committing.
 - Never use `--no-verify`, `--amend` unless the user explicitly requests it.
 - Never force-push.
 - Keep commit messages brief and human-readable.
-  - 50 character maximum for commit messages
-  - (optional) Up to 2 lines for the commit description
+  - 50 character maximum for the commit subject line
+  - If a description is needed, add it as a second `-m` flag: `git commit -m "<subject>" -m "<description, up to 2 lines>"`

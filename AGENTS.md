@@ -90,6 +90,7 @@ Before falling back to bash for file operations, check tool access first.
 - If the current branch name contains a ticket number (e.g. `PROJ-1234`), prefix the commit message with it: `[PROJ-1234] my commit message`.
 - Keep messages simple and easy to read.
 - Do not prefix messages with `feat:`, `fix:`, `refactor:`, or similar conventional commit tags unless the project already uses them.
+- Important: If setting AI-TOOl, Always set the value to `opencode`.
 
 ## Git Branches
 
