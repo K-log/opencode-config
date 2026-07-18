@@ -228,8 +228,9 @@ entries for remaining milestones: `- [ ] Milestone N: <title>`) in
 `## Task progress`, refresh the `Last updated` timestamp, and write the plan
 to `.opencode/plans/<identifier-or-slug>.md`.
 
-Present the plan summary to the user using this format:
+The plan summary must not including background colors or extra highlighting.
 
+Present the plan summary to the user using this format:
 ---
 
 **Summary**
@@ -243,6 +244,8 @@ Present the plan summary to the user using this format:
 >    ...
 >
 > **Key dependencies**: <package@version, ...>
+> **Supporting project docs:** <supporting-documentation-file, ...>
+> **Plan file**: <path/to/plan>
 >
 > **Follows patterns from**: `<file:line>`, ...
 
